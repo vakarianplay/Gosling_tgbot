@@ -13,14 +13,13 @@ import (
 )
 
 func main() {
-	// generatePic("aaaaaaaииииии")
+
 	outStr()
 }
 
-func generatePic(txt string) {
+func generatePic(txt []string) {
 
-	// txt := "Хто я?"
-	im, err := gg.LoadImage("pic/nav.jpg")
+	im, err := gg.LoadImage("pic/2.jpg")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -31,24 +30,27 @@ func generatePic(txt string) {
 	dc.SetRGB(1, 1, 1)
 	dc.Clear()
 	dc.SetRGB(0, 0, 0)
-	if err := dc.LoadFontFace("font/Roboto-Bold.ttf", 36); err != nil {
+	if err := dc.LoadFontFace("font/Roboto-Bold.ttf", 30); err != nil {
 		panic(err)
 	}
 
-	textWidth, textHeight := dc.MeasureString(txt)
-
 	dc.DrawImage(im, 0, 0)
 
-	dc.SetRGB255(0, 0, 0)
-	dc.DrawStringAnchored(txt, float64(width)/2+3, (float64(height)/2+3)+textHeight+150, 0.5, 0.5)
+	for i := 0; i < len(txt); i++ {
+		_, textHeight := dc.MeasureString(txt[i])
 
-	dc.SetRGB255(255, 255, 255)
-	dc.DrawStringAnchored(txt, float64(width)/2, (float64(height)/2)+textHeight+150, 0.5, 0.5)
+		dc.SetRGB255(0, 0, 0)
+		dc.DrawStringAnchored(txt[i], float64(width)/2+3, (float64(height)/2+3)+textHeight+100+float64(i*30), 0.5, 0.5)
 
+		dc.SetRGB255(255, 255, 255)
+		dc.DrawStringAnchored(txt[i], float64(width)/2, (float64(height)/2)+textHeight+100+float64(i*30), 0.5, 0.5)
+		// dc.Clip()
+
+	}
 	dc.Clip()
-	dc.SavePNG("outnav.png")
-
-	fmt.Println(textWidth)
+	// outName := time.Now().Weekday().String()
+	dc.SavePNG("out.png")
+	// fmt.Println(textWidth)
 	fmt.Println(width, " ", height)
 
 }
@@ -59,7 +61,6 @@ func outStr() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	str := string(content)
 	lines := strings.Split(str, "\n")
 	rand.Seed(time.Now().UnixNano())
@@ -67,5 +68,32 @@ func outStr() {
 	randomLine := lines[randomIndex]
 	fmt.Println(randomLine)
 
-	generatePic(randomLine)
+	// lines = splLine(randomLine)
+	// for _, line := range lines {
+	// 	fmt.Println(line)
+	// }
+	// fmt.Println(splLine(randomLine))
+	generatePic(splLine(randomLine))
+}
+
+func splLine(randomLine string) []string {
+
+	words := strings.Fields(randomLine)
+	var result []string
+	currentLine := ""
+
+	for _, word := range words {
+		currentLine += word + " "
+
+		if len(strings.Fields(currentLine)) >= 4 {
+			result = append(result, strings.TrimSpace(currentLine))
+			currentLine = ""
+		}
+	}
+
+	if currentLine != "" {
+		result = append(result, strings.TrimSpace(currentLine))
+	}
+
+	return result
 }
