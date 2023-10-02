@@ -2,14 +2,24 @@ package main
 
 import (
 	"fmt"
+	// "io/ioutil"
 	"log"
+	"math/rand"
+	"os"
+	"strings"
+	"time"
 
 	"github.com/fogleman/gg"
 )
 
 func main() {
+	// generatePic("aaaaaaaииииии")
+	outStr()
+}
 
-	txt := "Хто я?"
+func generatePic(txt string) {
+
+	// txt := "Хто я?"
 	im, err := gg.LoadImage("pic/nav.jpg")
 	if err != nil {
 		log.Fatal(err)
@@ -41,4 +51,21 @@ func main() {
 	fmt.Println(textWidth)
 	fmt.Println(width, " ", height)
 
+}
+
+func outStr() {
+
+	content, err := os.ReadFile("txt/tagged.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	str := string(content)
+	lines := strings.Split(str, "\n")
+	rand.Seed(time.Now().UnixNano())
+	randomIndex := rand.Intn(len(lines))
+	randomLine := lines[randomIndex]
+	fmt.Println(randomLine)
+
+	generatePic(randomLine)
 }
