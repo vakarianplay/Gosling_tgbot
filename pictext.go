@@ -6,20 +6,32 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 
 	"github.com/fogleman/gg"
 )
 
-func main() {
+var textPath string
+var picDir string
 
+func picEntry(textPath_ string, picDir_ string) {
+	textPath = textPath_
+	picDir = picDir_
 	outStr()
 }
 
 func generatePic(txt []string) {
 
-	im, err := gg.LoadImage("pic/2.jpg")
+	imgFile, err := selectRandomFile()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(imgFile)
+
+	im, err := gg.LoadImage(imgFile)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -48,16 +60,16 @@ func generatePic(txt []string) {
 
 	}
 	dc.Clip()
-	// outName := time.Now().Weekday().String()
-	dc.SavePNG("out.png")
+
+	dc.SavePNG(strconv.FormatInt(time.Now().UnixMilli(), 10) + "_out.png")
 	// fmt.Println(textWidth)
-	fmt.Println(width, " ", height)
+	// fmt.Println(width, " ", height)
 
 }
 
 func outStr() {
 
-	content, err := os.ReadFile("txt/tagged.txt")
+	content, err := os.ReadFile(textPath)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -96,4 +108,22 @@ func splLine(randomLine string) []string {
 	}
 
 	return result
+}
+
+func selectRandomFile() (string, error) {
+
+	files, err := os.ReadDir(picDir)
+	if err != nil {
+		return "", err
+	}
+
+	if len(files) == 0 {
+		return "", fmt.Errorf("No files")
+	}
+
+	rand.Seed(time.Now().UnixNano())
+	randomIndex := rand.Intn(len(files))
+	randomFile := files[randomIndex]
+
+	return filepath.Join("pic", randomFile.Name()), nil
 }
