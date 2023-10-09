@@ -1,0 +1,5 @@
+bot: 
+    api_key: place_apikey_here
+files:
+    text: txt/tagged.txt
+    pic_dir: pic
