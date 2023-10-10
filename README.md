@@ -8,8 +8,8 @@ Random wisdom from Gosling
 ------------------------------------------
 # Roadmap 
 - [x] place text on pictute
-- [ ] get text from markov chain
-- [ ] add config file
+- [x] get text from markov chain
+- [x] add config file
 - [ ] create telegtam bot
 
 
