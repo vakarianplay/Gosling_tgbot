@@ -10,9 +10,10 @@ import (
 
 func main() {
 
-	botapi, textPath, picDir := readCfg()[0], readCfg()[1], readCfg()[2]
-	telegramBot(botapi)
+	botapi, textPath, picDir, userFile := readCfg()[0], readCfg()[1], readCfg()[2], readCfg()[3]
+	telegramBot(botapi, userFile)
 	picEntry(textPath, picDir)
+	// fmt.Println(botapi, textPath, picDir, userFile)
 
 }
 
@@ -33,13 +34,15 @@ func readCfg() []string {
 	apiKey := (cfgYaml["bot"].(map[string]interface{})["api_key"])
 	textPath := (cfgYaml["files"].(map[string]interface{})["text"])
 	picDir := (cfgYaml["files"].(map[string]interface{})["pic_dir"])
+	userFile := (cfgYaml["files"].(map[string]interface{})["users_list"])
 
 	apiKey_ := fmt.Sprintf("%v", apiKey)
 	textPath_ := fmt.Sprintf("%v", textPath)
 	picDir_ := fmt.Sprintf("%v", picDir)
+	userFile_ := fmt.Sprintf("%v", userFile)
 
 	var out []string
-	out = append(out, apiKey_, textPath_, picDir_)
+	out = append(out, apiKey_, textPath_, picDir_, userFile_)
 
 	return out
 }

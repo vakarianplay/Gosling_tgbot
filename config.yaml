@@ -1,0 +1,6 @@
+bot: 
+    api_key: api_key_here
+files:
+    text: txt/tagged.txt
+    pic_dir: pic
+    users_list: users
