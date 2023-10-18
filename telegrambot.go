@@ -53,13 +53,13 @@ func saveUser(userID int) {
 
 func sendInfo() string {
 	fmt.Println("entry info")
-	return "info"
+	return "Goslingatorbot \n vakarian.website"
 
 }
 
-func sendTest() string {
-	fmt.Printf("tst")
-	return "TST"
+func sendGoslingPic() string {
+	outStr()
+	return "Place pic here"
 }
 
 func telegramBot(botApi, userFile_ string) {
@@ -67,11 +67,24 @@ func telegramBot(botApi, userFile_ string) {
 	userFile = userFile_
 
 	actions := map[string]func() string{
-		"info": sendInfo,
-		"test": sendTest,
+		"💎🤜 Гослинг, дай мне мудрость 🤛💎": sendGoslingPic,
+		"ℹ О боте ℹ": sendInfo,
 	}
 
 	botToken := botApi
+
+	menu := &tb.ReplyMarkup{ResizeReplyKeyboard: true}
+	btnSendPic := menu.Text("💎🤜 Гослинг, дай мне мудрость 🤛💎")
+	btnAbout := menu.Text("ℹ О боте ℹ")
+
+	menu.Reply(
+		menu.Row(btnSendPic),
+		menu.Row(btnAbout),
+	)
+
+	markdown := &tb.SendOptions{
+		ParseMode: tb.ModeMarkdown,
+	}
 
 	bot, err := tb.NewBot(tb.Settings{
 		Token:  botToken,
@@ -86,10 +99,11 @@ func telegramBot(botApi, userFile_ string) {
 	})
 
 	bot.Handle("/start", func(m *tb.Message) {
+
 		saveUser(int(m.Sender.ID))
-		userName := m.Sender.FirstName + m.Sender.LastName
-		bot.Send(m.Sender, "Привет, "+userName+"\nЭтот бот - мудрость Райана Гослинга.\nПросто попроси его дать тебе мудрый совет.")
-		bot.Send(m.Sender, "↓ выбери дальнейшее действие ↓")
+		userName := m.Sender.FirstName + " " + m.Sender.LastName
+		bot.Send(m.Sender, "*Привет, "+userName+"*\n\n_Этот бот - мудрость Райана Гослинга._\nПросто попроси его дать тебе мудрый совет.", markdown)
+		bot.Send(m.Sender, "↓ выбери дальнейшее действие ↓", menu)
 
 	})
 
@@ -99,8 +113,7 @@ func telegramBot(botApi, userFile_ string) {
 		if ok {
 			bot.Send(m.Sender, actions[m.Text]())
 		} else {
-			bot.Send(m.Sender, "Я тебя не понимаю")
-			bot.Send(m.Sender, "Я тебя не понимаю")
+			bot.Send(m.Sender, "_Я тебя не понимаю_", markdown)
 		}
 	})
 

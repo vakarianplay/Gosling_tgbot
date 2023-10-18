@@ -11,8 +11,9 @@ import (
 func main() {
 
 	botapi, textPath, picDir, userFile := readCfg()[0], readCfg()[1], readCfg()[2], readCfg()[3]
-	telegramBot(botapi, userFile)
 	picEntry(textPath, picDir)
+	telegramBot(botapi, userFile)
+
 	// fmt.Println(botapi, textPath, picDir, userFile)
 
 }
