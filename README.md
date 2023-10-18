@@ -10,7 +10,12 @@ Random wisdom from Gosling
 - [x] place text on pictute
 - [x] get text from markov chain
 - [x] add config file
-- [ ] create telegtam bot
+- [ ] add font setting in config
+- [x] create telegtam bot
+- [x] list of users
+- [x] markup keyboard
+- [ ] bot captions
+- [ ] send picture
 
 
 
