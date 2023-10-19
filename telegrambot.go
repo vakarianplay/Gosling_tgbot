@@ -59,7 +59,11 @@ func sendInfo() string {
 
 func sendGoslingPic() string {
 	outStr()
-	return "Place pic here"
+	return "Soon here place picture"
+}
+
+func sendGoslingLine() string {
+	return getLineTst() + "\n\n_goslingatorbot_"
 }
 
 func telegramBot(botApi, userFile_ string) {
@@ -68,7 +72,8 @@ func telegramBot(botApi, userFile_ string) {
 
 	actions := map[string]func() string{
 		"💎🤜 Гослинг, дай мне мудрость 🤛💎": sendGoslingPic,
-		"ℹ О боте ℹ": sendInfo,
+		"ℹ О боте ℹ":              sendInfo,
+		"✨ Гослинг, дай цитату ✨": sendGoslingLine,
 	}
 
 	botToken := botApi
@@ -76,9 +81,10 @@ func telegramBot(botApi, userFile_ string) {
 	menu := &tb.ReplyMarkup{ResizeReplyKeyboard: true}
 	btnSendPic := menu.Text("💎🤜 Гослинг, дай мне мудрость 🤛💎")
 	btnAbout := menu.Text("ℹ О боте ℹ")
+	btnGetLine := menu.Text("✨ Гослинг, дай цитату ✨")
 
 	menu.Reply(
-		menu.Row(btnSendPic),
+		menu.Row(btnSendPic, btnGetLine),
 		menu.Row(btnAbout),
 	)
 
@@ -111,7 +117,7 @@ func telegramBot(botApi, userFile_ string) {
 
 		_, ok := actions[m.Text]
 		if ok {
-			bot.Send(m.Sender, actions[m.Text]())
+			bot.Send(m.Sender, actions[m.Text](), markdown)
 		} else {
 			bot.Send(m.Sender, "_Я тебя не понимаю_", markdown)
 		}

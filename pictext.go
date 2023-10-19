@@ -16,11 +16,16 @@ import (
 
 var textPath string
 var picDir string
+var fontFile string
+var fontSize int
 
-func picEntry(textPath_ string, picDir_ string) {
+func picEntry(textPath_, picDir_, fontFile_, fontSize_ string) {
 	textPath = textPath_
 	picDir = picDir_
-	outStr()
+	fontFile = fontFile_
+	fontSize, _ = strconv.Atoi(fontSize_)
+	// outStr()
+	fmt.Println("Pic settings init   font: "+fontFile, "size: ", fontSize)
 }
 
 func generatePic(txt []string) {
@@ -42,7 +47,7 @@ func generatePic(txt []string) {
 	dc.SetRGB(1, 1, 1)
 	dc.Clear()
 	dc.SetRGB(0, 0, 0)
-	if err := dc.LoadFontFace("font/Roboto-Bold.ttf", 30); err != nil {
+	if err := dc.LoadFontFace(fontFile, float64(fontSize)); err != nil {
 		panic(err)
 	}
 
@@ -88,6 +93,21 @@ func outStr() {
 	generatePic(splLine(randomLine))
 }
 
+func getLineTst() string {
+
+	content, err := os.ReadFile(textPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+	str := string(content)
+	lines := strings.Split(str, "\n")
+	rand.Seed(time.Now().UnixNano())
+	randomIndex := rand.Intn(len(lines))
+	randomLine := lines[randomIndex]
+
+	return randomLine
+}
+
 func splLine(randomLine string) []string {
 
 	words := strings.Fields(randomLine)
@@ -125,5 +145,5 @@ func selectRandomFile() (string, error) {
 	randomIndex := rand.Intn(len(files))
 	randomFile := files[randomIndex]
 
-	return filepath.Join("pic", randomFile.Name()), nil
+	return filepath.Join(picDir, randomFile.Name()), nil
 }
