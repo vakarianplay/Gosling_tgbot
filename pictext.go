@@ -66,7 +66,8 @@ func generatePic(txt []string) {
 	}
 	dc.Clip()
 
-	dc.SavePNG(strconv.FormatInt(time.Now().UnixMilli(), 10) + "_out.png")
+	// dc.SavePNG(strconv.FormatInt(time.Now().UnixMilli(), 10) + "_out.png")
+	dc.SavePNG("out.png")
 	// fmt.Println(textWidth)
 	// fmt.Println(width, " ", height)
 
