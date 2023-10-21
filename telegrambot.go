@@ -12,6 +12,8 @@ import (
 
 var userFile string
 
+var markdown *tb.SendOptions
+
 func doesIDExist(userID int) bool {
 
 	content, err := os.ReadFile(userFile)
@@ -51,27 +53,42 @@ func saveUser(userID int) {
 	}
 }
 
-func sendInfo() string {
-	fmt.Println("entry info")
-	return "Goslingatorbot \n vakarian.website"
+func sendInfo(bot *tb.Bot, m *tb.Message) {
+	firstLine := "Бот работает на предварительно сгенерированной текстовой модели mGPT, обученной на контенте из _филосовских и пацанских_ цитатников. Картинки сгенерированны Stable Diffusion."
+	secondLine := "*Автор: https://t.me/cyberbibki*\n\nСайт автора: https://vakarian.website\nGitHub: https://github.com/vakarianplay"
 
+	bot.Send(m.Sender, firstLine, markdown)
+	bot.Send(m.Sender, secondLine, markdown)
 }
 
-func sendGoslingPic() string {
+func sendGoslingPic(bot *tb.Bot, m *tb.Message) {
+	msg, _ := bot.Send(m.Sender, "⌛️Запрос добавлен в очередь. Гослинг думает...")
 	outStr()
-	return "Soon here place picture"
+
+	file, err := os.Open("out.png")
+	if err != nil {
+		log.Println("Ошибка при открытии файла:", err)
+	}
+	defer file.Close()
+
+	caption := "🌅 Мудрость от Гослинга _@goslingatorbot_"
+
+	photo := &tb.Photo{File: tb.FromReader(file), Caption: caption}
+
+	bot.Send(m.Sender, photo, markdown)
+	bot.Delete(msg)
 }
 
-func sendGoslingLine() string {
-	return getLineTst() + "\n\n_goslingatorbot_"
+func sendGoslingLine(bot *tb.Bot, m *tb.Message) {
+	bot.Send(m.Sender, getLineTst()+"\n\n_@goslingatorbot_", markdown)
 }
 
 func telegramBot(botApi, userFile_ string) {
 
 	userFile = userFile_
 
-	actions := map[string]func() string{
-		"💎🤜 Гослинг, дай мне мудрость 🤛💎": sendGoslingPic,
+	actions := map[string]func(bot *tb.Bot, m *tb.Message){
+		"💎 Гослинг, дай мне мудрость 💎": sendGoslingPic,
 		"ℹ О боте ℹ":              sendInfo,
 		"✨ Гослинг, дай цитату ✨": sendGoslingLine,
 	}
@@ -79,7 +96,7 @@ func telegramBot(botApi, userFile_ string) {
 	botToken := botApi
 
 	menu := &tb.ReplyMarkup{ResizeReplyKeyboard: true}
-	btnSendPic := menu.Text("💎🤜 Гослинг, дай мне мудрость 🤛💎")
+	btnSendPic := menu.Text("💎 Гослинг, дай мне мудрость 💎")
 	btnAbout := menu.Text("ℹ О боте ℹ")
 	btnGetLine := menu.Text("✨ Гослинг, дай цитату ✨")
 
@@ -88,7 +105,7 @@ func telegramBot(botApi, userFile_ string) {
 		menu.Row(btnAbout),
 	)
 
-	markdown := &tb.SendOptions{
+	markdown = &tb.SendOptions{
 		ParseMode: tb.ModeMarkdown,
 	}
 
@@ -117,12 +134,11 @@ func telegramBot(botApi, userFile_ string) {
 
 		_, ok := actions[m.Text]
 		if ok {
-			bot.Send(m.Sender, actions[m.Text](), markdown)
+			actions[m.Text](bot, m)
 		} else {
 			bot.Send(m.Sender, "_Я тебя не понимаю_", markdown)
 		}
 	})
 
-	//bot run
 	bot.Start()
 }
