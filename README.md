@@ -3,7 +3,13 @@ Random wisdom from Gosling
 
 ![alt text](https://img.shields.io/badge/Golang-1.21.1-blue?style=flat-square&logo=go)
 
-![alt text](https://img.shields.io/badge/Status-in%20process-2E8B57?style=for-the-badge&logo=Buddy)
+![alt text](https://img.shields.io/badge/Status-in%20complete-2E8B57?style=for-the-badge&logo=Buddy)
+
+### Bot available https://t.me/goslingatorbot
+
+------------------------------------------
+
+Releases: 
 
 ------------------------------------------
 # Roadmap 
