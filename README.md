@@ -9,7 +9,10 @@ Random wisdom from Gosling
 
 ------------------------------------------
 
-Releases: 
+## Releases: 
+
+For windows x64 and linux x64 https://github.com/vakarianplay/Gosling_tgbot/releases
+
 
 ------------------------------------------
 # Roadmap 
