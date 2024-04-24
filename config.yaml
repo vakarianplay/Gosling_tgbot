@@ -1,9 +1,0 @@
-bot: 
-    api_key: api_key
-files:
-    text: txt/tagged.txt
-    pic_dir: pic
-    users_list: users
-font:
-    font_file: font/Roboto-Bold.ttf
-    font_size: 30
