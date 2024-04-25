@@ -21,6 +21,7 @@ func main() {
 		log.Println(dbPath + " connected")
 	}
 
+	go Ticker()
 	TelegramBot(botapi, db)
 
 	// defer db.Close()
