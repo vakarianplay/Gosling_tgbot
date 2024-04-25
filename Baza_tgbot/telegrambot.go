@@ -40,18 +40,6 @@ func saveUser(userID int, userName string) {
 }
 
 func sendUsers(bot *tb.Bot, m *tb.Message) {
-	// qCount := strings.Replace(Qcounter, "{table}", "users", -1)
-	// result, err := db.Query(qCount)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// defer result.Close()
-
-	// var count string
-	// result.Next()
-	// if err := result.Scan(&count); err != nil {
-	// 	panic(err)
-	// }
 	countUsers := strconv.Itoa(countQuery("users"))
 	countRecords := strconv.Itoa(countQuery("content"))
 	log.Println("Users count: " + countUsers + "Records: " + countRecords)
@@ -114,7 +102,7 @@ func saveLine(bot *tb.Bot, m *tb.Message) {
 	tgid := int(m.Sender.ID)
 	baseLine := m.Text
 
-	if !strings.HasPrefix(baseLine, "/") && len(baseLine) > 10 {
+	if !strings.HasPrefix(baseLine, "/") && len(baseLine) > 15 && len(baseLine) < 512 {
 		qAdd := strings.Replace(QaddRecord, "{text}", baseLine, -1)
 		qAdd = strings.Replace(qAdd, "{author}", author, -1)
 		qAdd = strings.Replace(qAdd, "{tgid}", strconv.Itoa(tgid), -1)
@@ -157,7 +145,17 @@ func getBaseById(bot *tb.Bot, m *tb.Message) {
 
 	headerLine := "Это твои базы, " + m.Sender.FirstName + " " + m.Sender.LastName + "\n_Используй команду /delete <id> для удаления._"
 	bot.Send(m.Sender, headerLine, markdown)
-	bot.Send(m.Sender, listBase, markdown)
+
+	runes := []rune(listBase)
+	totalRunes := len(runes)
+	for i := 0; i < totalRunes; i += 4000 {
+		end := i + 4000
+		if end > totalRunes {
+			end = totalRunes
+		}
+		part := string(runes[i:end])
+		bot.Send(m.Sender, part, markdown)
+	}
 }
 
 func delBaseLine(bot *tb.Bot, m *tb.Message, recId int) {
@@ -176,7 +174,6 @@ func delBaseLine(bot *tb.Bot, m *tb.Message, recId int) {
 	} else {
 		bot.Send(m.Sender, "🚫 ТЕБЕ СЮДА НЕЛЬЗЯ \nЭто не твоя база!", markdown)
 	}
-	// bot.Send(m.Sender, "Отправь сюда свою _БАЗУ_ или анекдот, а я его запомню", markdown)
 }
 
 func TelegramBot(botApi string, db_ *sql.DB) {
