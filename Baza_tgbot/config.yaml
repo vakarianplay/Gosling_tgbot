@@ -1,9 +1,0 @@
-bot: 
-    api_key: api_key
-database:
-    file: dataBase/bazaDB.db
-    content_table: content
-    users_table: users
-command:
-    temp_section: params
-
