@@ -1,5 +1,5 @@
 bot: 
-    api_key: 1933129297:AAFtgv9LaOgDbT6fUKnIbd1rBsVCrIA_k2o
+    api_key: api_key
 database:
     file: dataBase/bazaDB.db
     content_table: content
