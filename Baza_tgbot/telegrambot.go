@@ -13,6 +13,7 @@ import (
 var markdown *tb.SendOptions
 
 var db *sql.DB
+var contentTable, usersTable string
 
 func doesIDExist(userID int) bool {
 	qExist := strings.Replace(Qexist, "{id}", strconv.Itoa(userID), -1)
@@ -176,10 +177,12 @@ func delBaseLine(bot *tb.Bot, m *tb.Message, recId int) {
 	}
 }
 
-func TelegramBot(botApi string, db_ *sql.DB) {
+func TelegramBot(botApi, content_, users_ string, db_ *sql.DB) {
 
 	// userFile = userFile_
 	db = db_
+	contentTable = content_
+	usersTable = users_
 
 	actions := map[string]func(bot *tb.Bot, m *tb.Message){
 		"💎 Выдай базу 💎":   sendBaseLine,

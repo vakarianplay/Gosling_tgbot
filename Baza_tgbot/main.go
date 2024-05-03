@@ -22,7 +22,7 @@ func main() {
 	}
 
 	go Ticker()
-	TelegramBot(botapi, db)
+	TelegramBot(botapi, contentDB, usersDB, db)
 
 	// defer db.Close()
 
@@ -58,7 +58,7 @@ func readCfg() []string {
 
 	var cfgYaml map[string]interface{}
 	// cfgFile, err := os.ReadFile("config.yaml")
-	cfgFile, err := ioutil.ReadFile("config.yaml")
+	cfgFile, err := ioutil.ReadFile("config.yml")
 	if err != nil {
 		log.Fatal(err)
 	}
