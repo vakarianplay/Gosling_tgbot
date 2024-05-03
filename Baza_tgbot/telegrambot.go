@@ -41,8 +41,8 @@ func saveUser(userID int, userName string) {
 }
 
 func sendUsers(bot *tb.Bot, m *tb.Message) {
-	countUsers := strconv.Itoa(countQuery("users"))
-	countRecords := strconv.Itoa(countQuery("content"))
+	countUsers := strconv.Itoa(countQuery(usersTable))
+	countRecords := strconv.Itoa(countQuery(contentTable))
 	log.Println("Users count: " + countUsers + "Records: " + countRecords)
 	bot.Send(m.Sender, "Количество юзеров:\n*"+countUsers+"*\n\n\nКоличество баз:\n*"+countRecords+"*", markdown)
 }
@@ -75,7 +75,7 @@ func sendInfo(bot *tb.Bot, m *tb.Message) {
 }
 
 func sendBaseLine(bot *tb.Bot, m *tb.Message) {
-	qRnd := strings.Replace(QgetRandom, "{table}", "content", -1)
+	qRnd := strings.Replace(QgetRandom, "{table}", contentTable, -1)
 	result, err := db.Query(qRnd)
 	if err != nil {
 		panic(err)
@@ -160,7 +160,7 @@ func getBaseById(bot *tb.Bot, m *tb.Message) {
 }
 
 func delBaseLine(bot *tb.Bot, m *tb.Message, recId int) {
-	stRecs := countQuery("content")
+	stRecs := countQuery(contentTable)
 
 	tgid := int(m.Sender.ID)
 	qDel := strings.Replace(QdelById, "{tgid}", strconv.Itoa(tgid), -1)
@@ -168,7 +168,7 @@ func delBaseLine(bot *tb.Bot, m *tb.Message, recId int) {
 	log.Println("delete rec: " + qDel)
 	db.Exec(qDel)
 
-	endRecs := countQuery("content")
+	endRecs := countQuery(contentTable)
 
 	if stRecs > endRecs {
 		bot.Send(m.Sender, "_БАЗA_ удалена ♻️", markdown)
