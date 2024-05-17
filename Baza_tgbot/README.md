@@ -18,7 +18,7 @@
 - [x] markup keyboard
 - [x] protect userspaces
 - [ ] module for Nexton HMI display
-- [ ] config section for Nexton
+- [x] config section for Nexton
 - [ ] work with serial port
 
 
