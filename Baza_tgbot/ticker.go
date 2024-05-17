@@ -11,23 +11,22 @@ import (
 // var dbTick *sql.DB
 // var contentTbl string
 
-func Ticker() {
+func Ticker(port, baud, contentCmd, authorCmd string) {
 
 	ticker := time.NewTicker(5 * time.Second)
 
-	// Запускаем бесконечный цикл, который будет ждать срабатывания тикера.
 	for range ticker.C {
-		// Выводим лог-сообщение "tick".
-		log.Println("tick")
-		// log.Println(viewBaseLine())
+		log.Println("tick "+port, " - "+baud)
 		ans, au := viewBaseLine()
+		ans = contentCmd + "\"" + ans + "\""
+		au = authorCmd + "\"" + au + "\""
 		log.Println(ans, "    ", au)
 	}
 }
 
 func RunTick() {
-	go Ticker()
-	select {}
+	// go Ticker()
+	// select {}
 }
 
 func viewBaseLine() (string, string) {

@@ -12,6 +12,7 @@ import (
 
 func main() {
 	botapi, dbPath, contentDB, usersDB := readCfg()[0], readCfg()[1], readCfg()[2], readCfg()[3]
+
 	log.Println(botapi, dbPath, contentDB, usersDB)
 
 	db, err := sql.Open("sqlite3", dbPath)
@@ -21,37 +22,9 @@ func main() {
 		log.Println(dbPath + " connected")
 	}
 
-	go Ticker()
+	go Ticker(readCfg()[4], readCfg()[5], readCfg()[6], readCfg()[7])
 	TelegramBot(botapi, contentDB, usersDB, db)
 
-	// defer db.Close()
-
-	// db.Exec("INSERT INTO content (text, author) VALUES ('test test', 'sample author');")
-	// queryStr := strings.Replace("SELECT * FROM {table}", "{table}", contentDB, -1)
-	// fmt.Println(queryStr)
-	// rows, err := db.Query(queryStr)
-	// if err != nil {
-	// panic(err)
-	// }
-	// defer rows.Close() // Закрываем строки результатов при выходе из функции.
-
-	// Перебираем строки результатов.
-	// for rows.Next() {
-	// 	var id int
-	// 	var text string
-	// 	var author string
-	// 	if err := rows.Scan(&id, &text, &author); err != nil {
-	// 		panic(err)
-	// 	}
-
-	// 	// Выводим содержимое строки.
-	// 	fmt.Printf("ID: %d, Title: %s, Body: %s\n", id, text, author)
-	// }
-
-	// Проверяем наличие ошибок при переборе строк.
-	// if err := rows.Err(); err != nil {
-	// 	panic(err)
-	// }
 }
 
 func readCfg() []string {
@@ -73,18 +46,24 @@ func readCfg() []string {
 	dbPath := (cfgYaml["database"].(map[string]interface{})["file"])
 	contentDB := (cfgYaml["database"].(map[string]interface{})["content_table"])
 	usersDB := (cfgYaml["database"].(map[string]interface{})["users_table"])
-	// font := (cfgYaml["font"].(map[string]interface{})["font_file"])
-	// fsize := (cfgYaml["font"].(map[string]interface{})["font_size"])
+
+	port_n := (cfgYaml["port_config"].(map[string]interface{})["port_name"])
+	baud := (cfgYaml["port_config"].(map[string]interface{})["baud"])
+	contentCmd := (cfgYaml["port_config"].(map[string]interface{})["content_send"])
+	authorCmd := (cfgYaml["port_config"].(map[string]interface{})["author_send"])
 
 	apiKey_ := fmt.Sprintf("%v", apiKey)
 	dbPath_ := fmt.Sprintf("%v", dbPath)
 	contentDB_ := fmt.Sprintf("%v", contentDB)
 	usersDB_ := fmt.Sprintf("%v", usersDB)
-	// font_ := fmt.Sprintf("%v", font)
-	// fsize_ := fmt.Sprintf("%v", fsize)
+
+	port_ := fmt.Sprintf("%v", port_n)
+	baud_ := fmt.Sprintf("%v", baud)
+	contentCmd_ := fmt.Sprintf("%v", contentCmd)
+	authorCmd_ := fmt.Sprintf("%v", authorCmd)
 
 	var out []string
-	out = append(out, apiKey_, dbPath_, contentDB_, usersDB_)
+	out = append(out, apiKey_, dbPath_, contentDB_, usersDB_, port_, baud_, contentCmd_, authorCmd_)
 
 	return out
 }
