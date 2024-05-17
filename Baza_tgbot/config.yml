@@ -1,9 +1,12 @@
 bot: 
-    api_key: api_key
+    api_key: 1933129297:AAFtgv9LaOgDbT6fUKnIbd1rBsVCrIA_k2o
 database:
     file: dataBase/bazaDB.db
     content_table: content
     users_table: users
-command:
-    temp_section: params
+port_config:
+    port_name: COM4
+    baud: 9600
+    content_send: g0.txt=
+    author_send: t0.txt=
 
