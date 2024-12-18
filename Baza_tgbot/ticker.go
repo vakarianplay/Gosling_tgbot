@@ -51,10 +51,7 @@ func viewBaseLine() (string, string) {
 }
 
 func cleanString(input string) string {
-	// Убираем символы новой строки
 	cleaned := strings.ReplaceAll(input, "\n", " ")
-
-	// Убираем символы кавычек
 	cleaned = strings.ReplaceAll(cleaned, "\"", "")
 	cleaned = strings.ReplaceAll(cleaned, "'", "")
 
