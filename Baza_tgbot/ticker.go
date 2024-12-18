@@ -11,15 +11,15 @@ import (
 // var dbTick *sql.DB
 // var contentTbl string
 
-func Ticker(port, baud, contentCmd, authorCmd string) {
+func Ticker(root_path, port string) {
 
 	ticker := time.NewTicker(5 * time.Second)
 
 	for range ticker.C {
-		log.Println("tick "+port, " - "+baud)
+		log.Println("tick "+root_path, " - "+port)
 		ans, au := viewBaseLine()
-		ans = contentCmd + "\"" + ans + "\""
-		au = authorCmd + "\"" + au + "\""
+		// ans = contentCmd + "\"" + ans + "\""
+		// au = authorCmd + "\"" + au + "\""
 		log.Println(ans, "    ", au)
 	}
 }
@@ -51,7 +51,10 @@ func viewBaseLine() (string, string) {
 }
 
 func cleanString(input string) string {
+	// Убираем символы новой строки
 	cleaned := strings.ReplaceAll(input, "\n", " ")
+
+	// Убираем символы кавычек
 	cleaned = strings.ReplaceAll(cleaned, "\"", "")
 	cleaned = strings.ReplaceAll(cleaned, "'", "")
 

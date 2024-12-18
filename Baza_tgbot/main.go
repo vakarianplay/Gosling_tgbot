@@ -22,7 +22,7 @@ func main() {
 		log.Println(dbPath + " connected")
 	}
 
-	go Ticker(readCfg()[4], readCfg()[5], readCfg()[6], readCfg()[7])
+	go Ticker(readCfg()[4], readCfg()[5])
 	TelegramBot(botapi, contentDB, usersDB, db)
 
 }
@@ -47,23 +47,19 @@ func readCfg() []string {
 	contentDB := (cfgYaml["database"].(map[string]interface{})["content_table"])
 	usersDB := (cfgYaml["database"].(map[string]interface{})["users_table"])
 
-	port_n := (cfgYaml["port_config"].(map[string]interface{})["port_name"])
-	baud := (cfgYaml["port_config"].(map[string]interface{})["baud"])
-	contentCmd := (cfgYaml["port_config"].(map[string]interface{})["content_send"])
-	authorCmd := (cfgYaml["port_config"].(map[string]interface{})["author_send"])
+	root_serv := (cfgYaml["server_config"].(map[string]interface{})["root_path"])
+	port_srv := (cfgYaml["server_config"].(map[string]interface{})["port"])
 
 	apiKey_ := fmt.Sprintf("%v", apiKey)
 	dbPath_ := fmt.Sprintf("%v", dbPath)
 	contentDB_ := fmt.Sprintf("%v", contentDB)
 	usersDB_ := fmt.Sprintf("%v", usersDB)
 
-	port_ := fmt.Sprintf("%v", port_n)
-	baud_ := fmt.Sprintf("%v", baud)
-	contentCmd_ := fmt.Sprintf("%v", contentCmd)
-	authorCmd_ := fmt.Sprintf("%v", authorCmd)
+	root_path_ := fmt.Sprintf("%v", root_serv)
+	port_s := fmt.Sprintf("%v", port_srv)
 
 	var out []string
-	out = append(out, apiKey_, dbPath_, contentDB_, usersDB_, port_, baud_, contentCmd_, authorCmd_)
+	out = append(out, apiKey_, dbPath_, contentDB_, usersDB_, root_path_, port_s)
 
 	return out
 }
