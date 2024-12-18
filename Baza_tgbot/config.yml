@@ -4,9 +4,7 @@ database:
     file: dataBase/bazaDB.db
     content_table: content
     users_table: users
-port_config:
-    port_name: COM4
-    baud: 9600
-    content_send: g0.txt=
-    author_send: t0.txt=
+server_config:
+    root_path: /
+    port: 8081
 
