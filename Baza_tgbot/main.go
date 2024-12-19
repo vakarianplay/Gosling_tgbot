@@ -22,7 +22,7 @@ func main() {
 		log.Println(dbPath + " connected")
 	}
 
-	go Ticker(readCfg()[4], readCfg()[5])
+	go HTTPServer(readCfg()[4], readCfg()[5])
 	TelegramBot(botapi, contentDB, usersDB, db)
 
 }

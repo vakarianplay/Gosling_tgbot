@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
@@ -10,12 +9,12 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-var dbTick *sql.DB
+// var dbTick *sql.DB
 
 // var contentTbl string
 
-func HTTPServer(root_path, port_ string, db_ *sql.DB) {
-	dbTick = db_
+func HTTPServer(root_path, port_ string) {
+	// dbTick = db_
 
 	// ticker := time.NewTicker(5 * time.Second)
 
@@ -40,8 +39,8 @@ func HTTPServer(root_path, port_ string, db_ *sql.DB) {
 }
 
 func viewBaseLine() (string, string) {
-	// qRnd := strings.Replace(QgetRandom, "{table}", contentTable, -1)
-	qRnd := strings.Replace(QgetRandom, "{table}", readCfg()[2], -1)
+	qRnd := strings.Replace(QgetRandom, "{table}", contentTable, -1)
+	// qRnd := strings.Replace(QgetRandom, "{table}", readCfg()[2], -1)
 	result, err := db.Query(qRnd)
 	if err != nil {
 		panic(err)
