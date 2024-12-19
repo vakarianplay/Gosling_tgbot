@@ -17,9 +17,9 @@
 - [x] delete records by user
 - [x] markup keyboard
 - [x] protect userspaces
-- [ ] module for Nexton HMI display
-- [x] config section for Nexton
-- [ ] work with serial port
+- [x] httpserver
+- [x] config section for httpserver
+- [ ] test work with esp firmware
 
 
 
