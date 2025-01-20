@@ -9,22 +9,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-// var dbTick *sql.DB
-
-// var contentTbl string
-
 func HTTPServer(root_path, port_ string) {
-	// dbTick = db_
-
-	// ticker := time.NewTicker(5 * time.Second)
-
-	// for range ticker.C {
-	// 	log.Println("tick "+root_path, " - "+port)
-	// 	ans, au := viewBaseLine()
-	// 	// ans = contentCmd + "\"" + ans + "\""
-	// 	// au = authorCmd + "\"" + au + "\""
-	// 	log.Println(ans, "    ", au)
-	// }
 
 	http.HandleFunc(root_path, func(w http.ResponseWriter, r *http.Request) {
 		ans, author := viewBaseLine()
