@@ -11,6 +11,8 @@ import (
 )
 
 func main() {
+
+	fmt.Println(Informer())
 	botapi, dbPath, contentDB, usersDB := readCfg()[0], readCfg()[1], readCfg()[2], readCfg()[3]
 
 	log.Println(botapi, dbPath, contentDB, usersDB)
