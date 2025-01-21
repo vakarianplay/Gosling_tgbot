@@ -12,8 +12,12 @@ import (
 
 func main() {
 
-	fmt.Println(Informer())
 	botapi, dbPath, contentDB, usersDB := readCfg()[0], readCfg()[1], readCfg()[2], readCfg()[3]
+	srvPath, port := readCfg()[4], readCfg()[5]
+	// infFlag, _ := strconv.ParseBool(readCfg()[6])
+	// itteraction, _ := strconv.ParseInt(readCfg()[7])
+	// infoTemplate := readCfg()[8]
+	// infoUrls := readCfg()[9]
 
 	log.Println(botapi, dbPath, contentDB, usersDB)
 
@@ -24,7 +28,8 @@ func main() {
 		log.Println(dbPath + " connected")
 	}
 
-	go HTTPServer(readCfg()[4], readCfg()[5])
+	// Informer(infFlag, int(itteraction), infoTemplate, infoUrls)
+	go HTTPServer(srvPath, port)
 	TelegramBot(botapi, contentDB, usersDB, db)
 
 }
@@ -52,6 +57,11 @@ func readCfg() []string {
 	root_serv := (cfgYaml["server_config"].(map[string]interface{})["root_path"])
 	port_srv := (cfgYaml["server_config"].(map[string]interface{})["port"])
 
+	info_flag := (cfgYaml["informer"].(map[string]interface{})["enabled"])
+	itter := (cfgYaml["informer"].(map[string]interface{})["itteraction"])
+	info_tmp := (cfgYaml["informer"].(map[string]interface{})["info_str"])
+	url_list := (cfgYaml["informer"].(map[string]interface{})["urls"])
+
 	apiKey_ := fmt.Sprintf("%v", apiKey)
 	dbPath_ := fmt.Sprintf("%v", dbPath)
 	contentDB_ := fmt.Sprintf("%v", contentDB)
@@ -60,8 +70,13 @@ func readCfg() []string {
 	root_path_ := fmt.Sprintf("%v", root_serv)
 	port_s := fmt.Sprintf("%v", port_srv)
 
+	info_flag_ := fmt.Sprintf("%v", info_flag)
+	itter_ := fmt.Sprintf("%v", itter)
+	info_str_ := fmt.Sprintf("%v", info_tmp)
+	urls_ := fmt.Sprintf("%v", url_list)
+
 	var out []string
-	out = append(out, apiKey_, dbPath_, contentDB_, usersDB_, root_path_, port_s)
+	out = append(out, apiKey_, dbPath_, contentDB_, usersDB_, root_path_, port_s, info_flag_, itter_, info_str_, urls_)
 
 	return out
 }

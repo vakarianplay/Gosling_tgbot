@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"strings"
-	"time"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -55,18 +54,17 @@ func cleanString(input string) string {
 	return cleaned
 }
 
-func Informer() string {
-	urlWttr := "https://ru.wttr.in/Moscow?format=%D0%A2%D0%B5%D0%BC%D0%BF%D0%B5%D1%80%D0%B0%D1%82%D1%83%D1%80%D0%B0:%20%t%20(%f),%20%C,%20%D0%B2%D0%BB%D0%B0%D0%B6%D0%BD%D0%BE%D1%81%D1%82%D1%8C:%20%h,%20%D0%B2%D0%B5%D1%82%D0%B5%D1%80:%20%w"
-	urlUsd := "https://rub.rate.sx/1USDT"
-	urlBtc := "http://rate.sx/1BTC"
+// func Informer(enabled_ bool, itter_ int, infTemplate_, infUrls string) string {
+// 	// urlWttr := "https://ru.wttr.in/Moscow?format=%D0%A2%D0%B5%D0%BC%D0%BF%D0%B5%D1%80%D0%B0%D1%82%D1%83%D1%80%D0%B0:%20%t%20(%f),%20%C,%20%D0%B2%D0%BB%D0%B0%D0%B6%D0%BD%D0%BE%D1%81%D1%82%D1%8C:%20%h,%20%D0%B2%D0%B5%D1%82%D0%B5%D1%80:%20%w"
+// 	// urlUsd := "https://rub.rate.sx/1USDT"
+// 	// urlBtc := "http://rate.sx/1BTC"
 
-	now := time.Now()
-	currentTime := now.Format("02-01 15:04")
+// 	// now := time.Now()
+// 	// currentTime := now.Format("02-01 15:04")
+// 	// infoAns := currentTime + "        " + getInfo(urlWttr) + "          RUB-USD: " + getInfo(urlUsd) + "    USD-BTC: " + getInfo(urlBtc)
 
-	infAns := currentTime + "        " + getInfo(urlWttr) + "          RUB-USD: " + getInfo(urlUsd) + "    USD-BTC: " + getInfo(urlBtc)
-
-	return infAns
-}
+// 	// return infoAns
+// }
 
 func getInfo(url string) string {
 
