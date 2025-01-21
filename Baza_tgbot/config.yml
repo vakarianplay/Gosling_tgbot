@@ -9,6 +9,6 @@ server_config:
     port: 8081
 informer:
     enabled: true
-    itteraction: 3
+    itteraction: 6
     info_str: Погода {placeholder}. RUB-USD {placeholder}. USD-BTC {placeholder}
     urls:  https://ru.wttr.in/Moscow?format=%D0%A2%D0%B5%D0%BC%D0%BF%D0%B5%D1%80%D0%B0%D1%82%D1%83%D1%80%D0%B0:%20%t%20(%f)%20%20%20%C%20%20%20%D0%92%D0%BB%D0%B0%D0%B6%D0%BD%D0%BE%D1%81%D1%82%D1%8C:%20%h%20%20%20%D0%92%D0%B5%D1%82%D0%B5%D1%80:%20%w, https://rub.rate.sx/1USDT, http://rate.sx/1BTC

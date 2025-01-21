@@ -11,11 +11,24 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func HTTPServer(root_path, port_ string) {
+var InfoGl string
+var counter int
+var response string
 
+func HTTPServer(root_path, port_ string, itter_ int) {
 	http.HandleFunc(root_path, func(w http.ResponseWriter, r *http.Request) {
-		ans, author := viewBaseLine()
-		response := fmt.Sprintf("%s   Автор: %s", ans, author)
+		log.Println(itter_, "  -----  ", counter)
+		if itter_ > counter {
+			ans, author := viewBaseLine()
+			response = fmt.Sprintf("%s   Автор: %s", ans, author)
+			counter++
+		} else {
+			now := time.Now()
+			currentTime := now.Format("02-01 15:04")
+			response = currentTime + "              " + InfoGl
+			counter = 0
+		}
+
 		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(response))
@@ -55,20 +68,36 @@ func cleanString(input string) string {
 	return cleaned
 }
 
-func Informer(enabled_ bool, itter_ int, infTemplate_ string, infUrls_ string) string {
-	now := time.Now()
-	currentTime := now.Format("02-01 15:04")
+func startInformer(enabled_ bool, infTemplate_ string, infUrls_ string) {
+	if enabled_ {
+		InfoGl = informer(enabled_, infTemplate_, infUrls_)
+		log.Println(InfoGl)
+		ticker := time.NewTicker(30 * time.Minute)
+		go func() {
+			for {
+				<-ticker.C
+				InfoGl = informer(enabled_, infTemplate_, infUrls_)
+				log.Println("update: " + InfoGl)
+			}
+		}()
+	}
+}
 
-	infoAns := currentTime + "         "
+func informer(enabled_ bool, infTemplate_ string, infUrls_ string) string {
+	// now := time.Now()
+	// currentTime := now.Format("02-01 15:04")
+
+	// infoAns := currentTime + "         "
+	var infoStr string
 	if enabled_ {
 		result, err := replacePlaceholders(infTemplate_, infUrls_)
 		if err != nil {
-			fmt.Println("Error:", err)
+			log.Println("Error:", err)
 		} else {
-			infoAns = infoAns + result
+			infoStr = result
 		}
 	}
-	return infoAns
+	return infoStr
 }
 
 func getInfo(url string) string {

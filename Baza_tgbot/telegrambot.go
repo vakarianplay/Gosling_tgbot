@@ -70,6 +70,7 @@ func sendInfo(bot *tb.Bot, m *tb.Message) {
 
 	bot.Send(m.Sender, firstLine, markdown)
 	bot.Send(m.Sender, secondLine+thirdLine, markdown)
+	// bot.Send(m.Sender, InfoGl, markdown)
 	sendUsers(bot, m)
 	// bot.Send(m.Sender, thirdLine, markdown)
 }

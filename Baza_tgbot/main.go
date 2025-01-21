@@ -29,8 +29,8 @@ func main() {
 		log.Println(dbPath + " connected")
 	}
 
-	fmt.Println(Informer(infFlag, int(itteraction), infoTemplate, infoUrls))
-	go HTTPServer(srvPath, port)
+	startInformer(infFlag, infoTemplate, infoUrls)
+	go HTTPServer(srvPath, port, itteraction)
 	TelegramBot(botapi, contentDB, usersDB, db)
 
 }
