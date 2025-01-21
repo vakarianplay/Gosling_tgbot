@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"strconv"
 
 	_ "github.com/mattn/go-sqlite3"
 	yaml "gopkg.in/yaml.v3"
@@ -14,10 +15,10 @@ func main() {
 
 	botapi, dbPath, contentDB, usersDB := readCfg()[0], readCfg()[1], readCfg()[2], readCfg()[3]
 	srvPath, port := readCfg()[4], readCfg()[5]
-	// infFlag, _ := strconv.ParseBool(readCfg()[6])
-	// itteraction, _ := strconv.ParseInt(readCfg()[7])
-	// infoTemplate := readCfg()[8]
-	// infoUrls := readCfg()[9]
+	infFlag, _ := strconv.ParseBool(readCfg()[6])
+	itteraction, _ := strconv.Atoi(readCfg()[7])
+	infoTemplate := readCfg()[8]
+	infoUrls := readCfg()[9]
 
 	log.Println(botapi, dbPath, contentDB, usersDB)
 
@@ -28,7 +29,7 @@ func main() {
 		log.Println(dbPath + " connected")
 	}
 
-	// Informer(infFlag, int(itteraction), infoTemplate, infoUrls)
+	fmt.Println(Informer(infFlag, int(itteraction), infoTemplate, infoUrls))
 	go HTTPServer(srvPath, port)
 	TelegramBot(botapi, contentDB, usersDB, db)
 
