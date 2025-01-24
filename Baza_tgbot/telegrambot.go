@@ -236,7 +236,7 @@ func TelegramBot(botApi, content_, users_ string, db_ *sql.DB) {
 	})
 
 	bot.Handle("/help", func(m *tb.Message) {
-		bot.Send(m.Sender, "/help - Показать справку\n/delete `<id>` - удалить запись\n/mybases - список моих баз")
+		bot.Send(m.Sender, "/help - Показать справку\n/delete `<id>` - удалить запись\n/mybases - список моих баз\n/informer - строка информер\n/ping - ПИНГ!")
 	})
 
 	bot.Handle("/mybases", func(m *tb.Message) {
