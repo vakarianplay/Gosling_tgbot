@@ -5,6 +5,7 @@ import (
 	"log"
 	"strconv"
 	"strings"
+	"time"
 
 	_ "github.com/mattn/go-sqlite3"
 	tb "gopkg.in/tucnak/telebot.v2"
@@ -250,6 +251,14 @@ func TelegramBot(botApi, content_, users_ string, db_ *sql.DB) {
 			return
 		}
 		delBaseLine(bot, m, recId)
+	})
+
+	bot.Handle("/informer", func(m *tb.Message) {
+		bot.Send(m.Sender, InfoGl, markdown)
+	})
+
+	bot.Handle("/ping", func(m *tb.Message) {
+		bot.Send(m.Sender, "PONG\n\nБот активен\nВремя на сервере ", time.Now().Format("02-01-2006 15:04:05"))
 	})
 
 	bot.Handle(tb.OnText, func(m *tb.Message) {

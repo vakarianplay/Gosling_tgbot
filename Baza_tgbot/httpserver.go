@@ -84,7 +84,7 @@ func startInformer(enabled_ bool, infTemplate_ string, infUrls_ string) {
 }
 
 func informer(enabled_ bool, infTemplate_ string, infUrls_ string) string {
-	// now := time.Now()
+	// now := time.Now().Format("02-01-2006 15:04:05")
 	// currentTime := now.Format("02-01 15:04")
 
 	// infoAns := currentTime + "         "
