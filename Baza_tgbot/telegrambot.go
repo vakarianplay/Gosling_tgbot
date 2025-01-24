@@ -258,7 +258,7 @@ func TelegramBot(botApi, content_, users_ string, db_ *sql.DB) {
 	})
 
 	bot.Handle("/ping", func(m *tb.Message) {
-		bot.Send(m.Sender, "PONG\n\nБот активен\nВремя на сервере ", time.Now().Format("02-01-2006 15:04:05"))
+		bot.Send(m.Sender, "PONG\n\nБот активен\nВремя на сервере "+time.Now().Format("02-01-2006 15:04:05"))
 	})
 
 	bot.Handle(tb.OnText, func(m *tb.Message) {
