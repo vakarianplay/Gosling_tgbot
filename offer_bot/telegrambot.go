@@ -67,39 +67,93 @@ func handlePhoto(bot *tb.Bot, m *tb.Message) {
 	user := m.Sender
 	userID := user.ID
 
-	// Получаем фотографию из сообщения.
 	photo := m.Photo
 	if photo == nil {
-		// Если фотография отсутствует (редкий случай).
-		bot.Send(user, "не верный формат")
+		bot.Send(user, "Ошибка при чтении файла.")
 		return
 	}
 
-	// Генерируем имя файла.
 	currentTime := time.Now().Format("2006-01-02_15-04-05")
 	fileName := fmt.Sprintf("/%s_%d.jpg", currentTime, userID)
 	fileName = contentDir + fileName
 	log.Println(fileName)
 
-	// Создаем директорию "user_content", если ее нет.
 	err := os.MkdirAll(contentDir, os.ModePerm)
 	if err != nil {
 		log.Println("Ошибка при создании директории:", err)
-		bot.Send(user, "Ошибка при сохранении файла.")
 		return
 	}
 
-	// Загружаем файл.
 	err = bot.Download(&photo.File, fileName)
 	if err != nil {
 		log.Println("Ошибка при скачивании файла:", err)
-		bot.Send(user, "Ошибка при сохранении файла.")
 		return
 	}
 
-	// Отправляем ответ пользователю.
 	bot.Send(user, "Мем отправлен")
 	log.Println("Изображение успешно сохранено:", fileName)
+}
+
+func handleGif(bot *tb.Bot, m *tb.Message) {
+	user := m.Sender
+	userID := user.ID
+
+	animation := m.Animation
+	if animation == nil {
+		bot.Send(user, "Ошибка при чтении GIF-файла.")
+		return
+	}
+
+	currentTime := time.Now().Format("2006-01-02_15-04-05")
+	fileName := fmt.Sprintf("/%s_%d.gif", currentTime, userID)
+	fileName = contentDir + fileName
+	log.Println(fileName)
+
+	err := os.MkdirAll(contentDir, os.ModePerm)
+	if err != nil {
+		log.Println("Ошибка при создании директории:", err)
+		return
+	}
+
+	err = bot.Download(&animation.File, fileName)
+	if err != nil {
+		log.Println("Ошибка при скачивании GIF-файла:", err)
+		return
+	}
+
+	bot.Send(user, "GIF отправлен")
+	log.Println("GIF успешно сохранен:", fileName)
+}
+
+func handleVideo(bot *tb.Bot, m *tb.Message) {
+	user := m.Sender
+	userID := user.ID
+
+	video := m.Video
+	if video == nil {
+		bot.Send(user, "Ошибка при чтении видеофайла.")
+		return
+	}
+
+	currentTime := time.Now().Format("2006-01-02_15-04-05")
+	fileName := fmt.Sprintf("/%s_%d.mp4", currentTime, userID)
+	fileName = contentDir + fileName
+	log.Println(fileName)
+
+	err := os.MkdirAll(contentDir, os.ModePerm)
+	if err != nil {
+		log.Println("Ошибка при создании директории:", err)
+		return
+	}
+
+	err = bot.Download(&video.File, fileName)
+	if err != nil {
+		log.Println("Ошибка при скачивании видеофайла:", err)
+		return
+	}
+
+	bot.Send(user, "Видео отправлено")
+	log.Println("Видео успешно сохранено:", fileName)
 }
 
 func TelegramBot(botApi, content_, users_ string) {
@@ -158,9 +212,15 @@ func TelegramBot(botApi, content_, users_ string) {
 	})
 
 	bot.Handle(tb.OnPhoto, func(m *tb.Message) {
-
 		handlePhoto(bot, m)
+	})
 
+	bot.Handle(tb.OnAnimation, func(m *tb.Message) {
+		handleGif(bot, m)
+	})
+
+	bot.Handle(tb.OnVideo, func(m *tb.Message) {
+		handleVideo(bot, m)
 	})
 
 	// 	_, ok := actions[m.Text]
