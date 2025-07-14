@@ -214,7 +214,7 @@ func TelegramBot(botApi, content_, users_ string) {
 
 	bot.Handle(tb.OnText, func(m *tb.Message) {
 
-		bot.Send(m.Sender, "_Бот не принимает текст_\nОтправь боту картинку", markdown)
+		bot.Send(m.Sender, "_Бот не принимает текст_\nОтправь боту картинку, видео или gif'ку", markdown)
 	})
 
 	bot.Handle(tb.OnPhoto, func(m *tb.Message) {
@@ -227,6 +227,26 @@ func TelegramBot(botApi, content_, users_ string) {
 
 	bot.Handle(tb.OnVideo, func(m *tb.Message) {
 		handleVideo(bot, m)
+	})
+
+	bot.Handle(tb.OnDocument, func(m *tb.Message) {
+		bot.Send(m.Sender, "_Бот это не поддерживает_\nОтправь боту картинку, видео или gif'ку", markdown)
+	})
+
+	bot.Handle(tb.OnAudio, func(m *tb.Message) {
+		bot.Send(m.Sender, "_Бот это не поддерживает_\nОтправь боту картинку, видео или gif'ку", markdown)
+	})
+
+	bot.Handle(tb.OnSticker, func(m *tb.Message) {
+		bot.Send(m.Sender, "_Боту нельзя отправить стикер_\nОтправь боту картинку, видео или gif'ку", markdown)
+	})
+
+	bot.Handle(tb.OnVoice, func(m *tb.Message) {
+		bot.Send(m.Sender, "_Бот это не поддерживает_\nОтправь боту картинку, видео или gif'ку", markdown)
+	})
+
+	bot.Handle(tb.OnVideoNote, func(m *tb.Message) {
+		bot.Send(m.Sender, "_Бот это не поддерживает_\nОтправь боту картинку, видео или gif'ку", markdown)
 	})
 
 	// 	_, ok := actions[m.Text]
