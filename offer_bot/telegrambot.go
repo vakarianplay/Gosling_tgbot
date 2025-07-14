@@ -64,6 +64,7 @@ func saveUser(m *tb.Message) {
 }
 
 func handlePhoto(bot *tb.Bot, m *tb.Message) {
+	msg, _ := bot.Send(m.Sender, "⌛️Запрос добавлен в очередь.")
 	user := m.Sender
 	userID := user.ID
 
@@ -91,10 +92,12 @@ func handlePhoto(bot *tb.Bot, m *tb.Message) {
 	}
 
 	bot.Send(user, "Мем отправлен")
+	bot.Delete(msg)
 	log.Println("Изображение успешно сохранено:", fileName)
 }
 
 func handleGif(bot *tb.Bot, m *tb.Message) {
+	msg, _ := bot.Send(m.Sender, "⌛️Запрос добавлен в очередь.")
 	user := m.Sender
 	userID := user.ID
 
@@ -122,10 +125,12 @@ func handleGif(bot *tb.Bot, m *tb.Message) {
 	}
 
 	bot.Send(user, "GIF отправлен")
+	bot.Delete(msg)
 	log.Println("GIF успешно сохранен:", fileName)
 }
 
 func handleVideo(bot *tb.Bot, m *tb.Message) {
+	msg, _ := bot.Send(m.Sender, "⌛️Запрос добавлен в очередь.")
 	user := m.Sender
 	userID := user.ID
 
@@ -153,6 +158,7 @@ func handleVideo(bot *tb.Bot, m *tb.Message) {
 	}
 
 	bot.Send(user, "Видео отправлено")
+	bot.Delete(msg)
 	log.Println("Видео успешно сохранено:", fileName)
 }
 
