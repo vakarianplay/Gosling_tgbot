@@ -2,69 +2,44 @@ package main
 
 import (
 	"encoding/csv"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
+	"time"
 
 	tb "gopkg.in/tucnak/telebot.v2"
 )
 
 var userFile string
 var contentDir string
-
 var markdown *tb.SendOptions
 
-// func doesIDExist(userID int) bool {
-
-// 	content, err := os.ReadFile(userFile)
-// 	if err != nil {
-// 		log.Println(err)
-// 		return false
-// 	}
-
-// 	lines := strings.Split(string(content), "\n")
-
-// 	for _, line := range lines {
-// 		id, _ := strconv.Atoi(line)
-// 		if id == userID {
-// 			return true
-// 		}
-// 	}
-// 	return false
-// }
-
 func doesIDExist(userID int) bool {
-	// Открываем CSV-файл.
 	file, err := os.Open(userFile)
 	if err != nil {
 		return false
 	}
 	defer file.Close()
 
-	// Читаем содержимое файла как CSV.
 	reader := csv.NewReader(file)
 	records, err := reader.ReadAll()
 	if err != nil {
 		return false
 	}
 
-	// Перебираем строки CSV-файла.
 	for _, record := range records {
 		if len(record) > 0 {
-			// Преобразуем первый элемент строки (ID) в int.
 			id, err := strconv.Atoi(record[0])
 			if err != nil {
-				// Игнорируем строки, где ID нельзя преобразовать в число.
 				continue
 			}
-			// Проверяем, совпадает ли ID.
 			if id == userID {
 				return true
 			}
 		}
 	}
 
-	// Если ID не найден, возвращаем false.
 	return false
 }
 
@@ -88,9 +63,49 @@ func saveUser(m *tb.Message) {
 	}
 }
 
+func handlePhoto(bot *tb.Bot, m *tb.Message) {
+	user := m.Sender
+	userID := user.ID
+
+	// Получаем фотографию из сообщения.
+	photo := m.Photo
+	if photo == nil {
+		// Если фотография отсутствует (редкий случай).
+		bot.Send(user, "не верный формат")
+		return
+	}
+
+	// Генерируем имя файла.
+	currentTime := time.Now().Format("2006-01-02_15-04-05")
+	fileName := fmt.Sprintf("/%s_%d.jpg", currentTime, userID)
+	fileName = contentDir + fileName
+	log.Println(fileName)
+
+	// Создаем директорию "user_content", если ее нет.
+	err := os.MkdirAll(contentDir, os.ModePerm)
+	if err != nil {
+		log.Println("Ошибка при создании директории:", err)
+		bot.Send(user, "Ошибка при сохранении файла.")
+		return
+	}
+
+	// Загружаем файл.
+	err = bot.Download(&photo.File, fileName)
+	if err != nil {
+		log.Println("Ошибка при скачивании файла:", err)
+		bot.Send(user, "Ошибка при сохранении файла.")
+		return
+	}
+
+	// Отправляем ответ пользователю.
+	bot.Send(user, "Мем отправлен")
+	log.Println("Изображение успешно сохранено:", fileName)
+}
+
 func TelegramBot(botApi, content_, users_ string) {
 
 	userFile = users_
+	contentDir = content_
 
 	// actions := map[string]func(bot *tb.Bot, m *tb.Message){
 	// 	"💎 Гослинг, дай мне мудрость 💎": sendGoslingPic,
@@ -101,15 +116,15 @@ func TelegramBot(botApi, content_, users_ string) {
 
 	botToken := botApi
 
-	menu := &tb.ReplyMarkup{ResizeReplyKeyboard: true}
-	btnSendPic := menu.Text("💎 Гослинг, дай мне мудрость 💎")
-	btnAbout := menu.Text("ℹ О боте ℹ")
-	btnGetLine := menu.Text("✨ Гослинг, дай цитату ✨")
+	// menu := &tb.ReplyMarkup{ResizeReplyKeyboard: true}
+	// btnSendPic := menu.Text("💎 Гослинг, дай мне мудрость 💎")
+	// btnAbout := menu.Text("ℹ О боте ℹ")
+	// btnGetLine := menu.Text("✨ Гослинг, дай цитату ✨")
 
-	menu.Reply(
-		menu.Row(btnSendPic, btnGetLine),
-		menu.Row(btnAbout),
-	)
+	// menu.Reply(
+	// 	menu.Row(btnSendPic, btnGetLine),
+	// 	menu.Row(btnAbout),
+	// )
 
 	markdown = &tb.SendOptions{
 		ParseMode: tb.ModeMarkdown,
@@ -131,13 +146,22 @@ func TelegramBot(botApi, content_, users_ string) {
 
 		saveUser(m)
 		userName := m.Sender.FirstName + " " + m.Sender.LastName
-		bot.Send(m.Sender, "*Привет, "+userName+"*\n\n_Этот бот - мудрость Райана Гослинга._\nПросто попроси его дать тебе мудрый совет.", markdown)
+		bot.Send(m.Sender, "*Привет, "+userName+"*\n\n_Этот бот - предложка._\nПросто скинь сюда мем, который ты хочешь запостить.", markdown)
 		bot.Send(m.Sender, "🌐Бесплатный и быстрый VPN: *https://raspad.space/vpn https://t.me/raspad_vpn*", markdown)
-		bot.Send(m.Sender, "↓ выбери дальнейшее действие ↓", menu)
+		// bot.Send(m.Sender, "↓ выбери дальнейшее действие ↓", menu)
 
 	})
 
-	// bot.Handle(tb.OnText, func(m *tb.Message) {
+	bot.Handle(tb.OnText, func(m *tb.Message) {
+
+		bot.Send(m.Sender, "_Бот не принимает текст_\nОтправь боту картинку", markdown)
+	})
+
+	bot.Handle(tb.OnPhoto, func(m *tb.Message) {
+
+		handlePhoto(bot, m)
+
+	})
 
 	// 	_, ok := actions[m.Text]
 	// 	if ok {
