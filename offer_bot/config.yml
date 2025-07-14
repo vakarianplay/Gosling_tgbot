@@ -1,0 +1,6 @@
+bot: 
+    api_key: 
+files:
+    users_content: content
+    users_list: users.csv
+
