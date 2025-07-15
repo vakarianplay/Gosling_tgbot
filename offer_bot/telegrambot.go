@@ -13,6 +13,7 @@ import (
 
 var userFile string
 var contentDir string
+var sendMessage string
 var markdown *tb.SendOptions
 
 func doesIDExist(userID int) bool {
@@ -91,7 +92,7 @@ func handlePhoto(bot *tb.Bot, m *tb.Message) {
 		return
 	}
 
-	bot.Send(user, "Мем отправлен")
+	bot.Send(user, sendMessage, markdown)
 	bot.Delete(msg)
 	log.Println("Изображение успешно сохранено:", fileName)
 }
@@ -124,7 +125,7 @@ func handleGif(bot *tb.Bot, m *tb.Message) {
 		return
 	}
 
-	bot.Send(user, "GIF отправлен")
+	bot.Send(user, sendMessage, markdown)
 	bot.Delete(msg)
 	log.Println("GIF успешно сохранен:", fileName)
 }
@@ -157,34 +158,18 @@ func handleVideo(bot *tb.Bot, m *tb.Message) {
 		return
 	}
 
-	bot.Send(user, "Видео отправлено")
+	bot.Send(user, sendMessage, markdown)
 	bot.Delete(msg)
 	log.Println("Видео успешно сохранено:", fileName)
 }
 
-func TelegramBot(botApi, content_, users_ string) {
+func TelegramBot(botApi, content_, users_, startM_, sendM_ string) {
 
 	userFile = users_
 	contentDir = content_
-
-	// actions := map[string]func(bot *tb.Bot, m *tb.Message){
-	// 	"💎 Гослинг, дай мне мудрость 💎": sendGoslingPic,
-	// 	"ℹ О боте ℹ":              sendInfo,
-	// 	"✨ Гослинг, дай цитату ✨": sendGoslingLine,
-	// 	"Юзеры": sendUsers,
-	// }
+	sendMessage = sendM_
 
 	botToken := botApi
-
-	// menu := &tb.ReplyMarkup{ResizeReplyKeyboard: true}
-	// btnSendPic := menu.Text("💎 Гослинг, дай мне мудрость 💎")
-	// btnAbout := menu.Text("ℹ О боте ℹ")
-	// btnGetLine := menu.Text("✨ Гослинг, дай цитату ✨")
-
-	// menu.Reply(
-	// 	menu.Row(btnSendPic, btnGetLine),
-	// 	menu.Row(btnAbout),
-	// )
 
 	markdown = &tb.SendOptions{
 		ParseMode: tb.ModeMarkdown,
@@ -206,7 +191,8 @@ func TelegramBot(botApi, content_, users_ string) {
 
 		saveUser(m)
 		userName := m.Sender.FirstName + " " + m.Sender.LastName
-		bot.Send(m.Sender, "*Привет, "+userName+"*\n\n_Этот бот - предложка._\nПросто скинь сюда мем, который ты хочешь запостить.", markdown)
+		// bot.Send(m.Sender, "*Привет, "+userName+"*\n\n_Этот бот - предложка._\nПросто скинь сюда мем, который ты хочешь запостить.", markdown)
+		bot.Send(m.Sender, userName+"\n"+startM_, markdown)
 		bot.Send(m.Sender, "🌐Бесплатный и быстрый VPN: *https://raspad.space/vpn https://t.me/raspad_vpn*", markdown)
 		// bot.Send(m.Sender, "↓ выбери дальнейшее действие ↓", menu)
 
@@ -256,6 +242,7 @@ func TelegramBot(botApi, content_, users_ string) {
 	// 		bot.Send(m.Sender, "_Я тебя не понимаю_", markdown)
 	// 	}
 	// })
-
+	log.Println("Bot started")
 	bot.Start()
+
 }

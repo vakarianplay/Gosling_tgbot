@@ -11,11 +11,11 @@ import (
 
 func main() {
 
-	botapi, contentPath, listUsers := readCfg()[0], readCfg()[1], readCfg()[2]
+	botapi, contentPath, listUsers, startMessage, sendMessage := readCfg()[0], readCfg()[1], readCfg()[2], readCfg()[3], readCfg()[4]
 
-	log.Println(botapi, contentPath, listUsers)
+	log.Println(botapi, contentPath, listUsers, startMessage, sendMessage)
 
-	TelegramBot(botapi, contentPath, listUsers)
+	TelegramBot(botapi, contentPath, listUsers, startMessage, sendMessage)
 
 }
 
@@ -38,12 +38,17 @@ func readCfg() []string {
 	usersContent := (cfgYaml["files"].(map[string]interface{})["users_content"])
 	usersList := (cfgYaml["files"].(map[string]interface{})["users_list"])
 
+	startMsg := (cfgYaml["messages"].(map[string]interface{})["start_message"])
+	sendMsg := (cfgYaml["messages"].(map[string]interface{})["send_message"])
+
 	apiKey_ := fmt.Sprintf("%v", apiKey)
 	usersContent_ := fmt.Sprintf("%v", usersContent)
 	usersList_ := fmt.Sprintf("%v", usersList)
+	startMsg_ := fmt.Sprintf("%v", startMsg)
+	sendMsg_ := fmt.Sprintf("%v", sendMsg)
 
 	var out []string
-	out = append(out, apiKey_, usersContent_, usersList_)
+	out = append(out, apiKey_, usersContent_, usersList_, startMsg_, sendMsg_)
 
 	return out
 }
