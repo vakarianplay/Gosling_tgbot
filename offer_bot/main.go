@@ -10,19 +10,14 @@ import (
 )
 
 func main() {
-
 	botapi, contentPath, listUsers, startMessage, sendMessage := readCfg()[0], readCfg()[1], readCfg()[2], readCfg()[3], readCfg()[4]
-
 	log.Println(botapi, contentPath, listUsers, startMessage, sendMessage)
-
 	TelegramBot(botapi, contentPath, listUsers, startMessage, sendMessage)
-
 }
 
 func readCfg() []string {
 
 	var cfgYaml map[string]interface{}
-	// cfgFile, err := os.ReadFile("config.yaml")
 	cfgFile, err := ioutil.ReadFile("config.yml")
 	if err != nil {
 		log.Fatal(err)
